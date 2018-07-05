@@ -52,6 +52,8 @@ public class VolumeInfo {
     private ReadingModes readingModes;
     @Expose
     private String title;
+    @Expose
+    private String subtitle;
 
     public Boolean getAllowAnonLogging() {
         return allowAnonLogging;
@@ -213,4 +215,11 @@ public class VolumeInfo {
         this.title = title;
     }
 
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
 }
