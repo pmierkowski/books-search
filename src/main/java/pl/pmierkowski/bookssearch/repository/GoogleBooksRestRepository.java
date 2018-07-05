@@ -3,22 +3,29 @@ package pl.pmierkowski.bookssearch.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
-import pl.pmierkowski.bookssearch.model.google.GoogleBooksWrapper;
+import org.springframework.web.util.UriComponentsBuilder;
+import pl.pmierkowski.bookssearch.model.google.GoogleBooks;
+import java.net.URI;
 
 @Repository
 public class GoogleBooksRestRepository {
 
     private RestTemplate restTemplate;
 
+    private UriComponentsBuilder uriComponentsBuilder;
+
     @Autowired
-    public GoogleBooksRestRepository(RestTemplate restTemplate) {
+    public GoogleBooksRestRepository(RestTemplate restTemplate, UriComponentsBuilder uriComponentsBuilder) {
         this.restTemplate = restTemplate;
+        this.uriComponentsBuilder = uriComponentsBuilder;
     }
 
-    public void searchBooks(String query){
-        GoogleBooksWrapper googleBooksWrapper =
-                this.restTemplate.getForObject("https://www.googleapis.com/books/v1/volumes?q=title:" + query, GoogleBooksWrapper.class);
+    public GoogleBooks searchBooks(String query) {
+        URI uri = this.uriComponentsBuilder
+                .queryParam("q", query)
+                .build()
+                .toUri();
 
-        System.out.println(googleBooksWrapper.toString());
+        return this.restTemplate.getForObject(uri, GoogleBooks.class);
     }
 }
