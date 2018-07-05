@@ -26,7 +26,7 @@ public class GoogleBooksRestRepository {
     @Cacheable(value = "searchBooksCache", cacheManager = "springCacheManager")
     public GoogleBooks searchBooks(String query) {
         URI uri = this.uriComponentsBuilder
-                .queryParam("q", query)
+                .replaceQueryParam("q", query)
                 .build()
                 .toUri();
 
