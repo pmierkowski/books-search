@@ -26,7 +26,7 @@ public class GoogleBooksRestRepository {
     @Cacheable(value = CacheConfiguration.GOOGLE_BOOK_SEARCH, cacheManager = CacheConfiguration.CACHE_MANAGER)
     public GoogleBooks findByTitle(String title) {
         URI uri = this.uriComponentsBuilder
-                .replaceQueryParam("q", title)
+                .replaceQueryParam("q", "title:" + title)
                 .build()
                 .toUri();
 
