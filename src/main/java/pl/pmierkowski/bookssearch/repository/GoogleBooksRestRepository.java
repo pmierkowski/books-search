@@ -2,20 +2,20 @@ package pl.pmierkowski.bookssearch.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import pl.pmierkowski.bookssearch.configuration.CacheConfiguration;
 import pl.pmierkowski.bookssearch.model.google.GoogleBooks;
+
 import java.net.URI;
 
 @Repository
-@EnableCaching
 public class GoogleBooksRestRepository {
 
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-    private UriComponentsBuilder uriComponentsBuilder;
+    private final UriComponentsBuilder uriComponentsBuilder;
 
     @Autowired
     public GoogleBooksRestRepository(RestTemplate restTemplate, UriComponentsBuilder uriComponentsBuilder) {
@@ -23,10 +23,10 @@ public class GoogleBooksRestRepository {
         this.uriComponentsBuilder = uriComponentsBuilder;
     }
 
-    @Cacheable(value = "searchBooksCache", cacheManager = "springCacheManager")
-    public GoogleBooks searchBooks(String query) {
+    @Cacheable(value = CacheConfiguration.GOOGLE_BOOK_SEARCH, cacheManager = CacheConfiguration.CACHE_MANAGER)
+    public GoogleBooks findByTitle(String title) {
         URI uri = this.uriComponentsBuilder
-                .replaceQueryParam("q", query)
+                .replaceQueryParam("q", title)
                 .build()
                 .toUri();
 

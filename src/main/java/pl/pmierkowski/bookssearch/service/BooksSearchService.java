@@ -15,7 +15,7 @@ public class BooksSearchService {
         this.googleBooksRestRepository = googleBooksRestRepository;
     }
 
-    public GoogleBooks searchBooks(String query) {
-        return this.googleBooksRestRepository.searchBooks(query);
+    public GoogleBooks getByTitle(String title) {
+        return this.googleBooksRestRepository.findByTitle(title);
     }
 }

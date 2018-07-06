@@ -26,7 +26,7 @@ jQuery(document).ready(function () {
         let query = $('#search-query').val();
         $('#books-list').html('Loading data ...');
 
-        $.getJSON("http://localhost:8080/search-books?title=" + query, function (data) {
+        $.getJSON("http://localhost:8080/books/?title=" + query, function (data) {
             $('#books-list').empty();
 
             $.each(data, function (key, val) {
