@@ -3,13 +3,10 @@ package pl.pmierkowski.bookssearch.model.google;
 
 import java.util.List;
 import javax.annotation.Generated;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.Expose;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class VolumeInfo {
 
     @Expose
@@ -39,6 +36,8 @@ public class VolumeInfo {
     @Expose
     private Long pageCount;
     @Expose
+    private PanelizationSummary panelizationSummary;
+    @Expose
     private String previewLink;
     @Expose
     private String printType;
@@ -52,8 +51,6 @@ public class VolumeInfo {
     private ReadingModes readingModes;
     @Expose
     private String title;
-    @Expose
-    private String subtitle;
 
     public Boolean getAllowAnonLogging() {
         return allowAnonLogging;
@@ -159,6 +156,14 @@ public class VolumeInfo {
         this.pageCount = pageCount;
     }
 
+    public PanelizationSummary getPanelizationSummary() {
+        return panelizationSummary;
+    }
+
+    public void setPanelizationSummary(PanelizationSummary panelizationSummary) {
+        this.panelizationSummary = panelizationSummary;
+    }
+
     public String getPreviewLink() {
         return previewLink;
     }
@@ -215,11 +220,4 @@ public class VolumeInfo {
         this.title = title;
     }
 
-    public String getSubtitle() {
-        return subtitle;
-    }
-
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
-    }
 }

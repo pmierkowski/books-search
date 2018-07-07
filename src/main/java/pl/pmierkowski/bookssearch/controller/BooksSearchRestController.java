@@ -38,4 +38,10 @@ public class BooksSearchRestController {
                 )
                 .collect(Collectors.toList());
     }
+
+    @RequestMapping(value = "prices/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public boolean getPrices(@RequestParam("isbn") String isbn) {
+        this.booksSearchService.getByIsbn(isbn);
+        return true;
+    }
 }

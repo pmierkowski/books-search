@@ -1,22 +1,36 @@
 
 package pl.pmierkowski.bookssearch.model.google;
 
+import java.util.List;
 import javax.annotation.Generated;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.Expose;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class SaleInfo {
 
+    @Expose
+    private String buyLink;
     @Expose
     private String country;
     @Expose
     private Boolean isEbook;
     @Expose
+    private ListPrice listPrice;
+    @Expose
+    private List<Offer> offers;
+    @Expose
+    private RetailPrice retailPrice;
+    @Expose
     private String saleability;
+
+    public String getBuyLink() {
+        return buyLink;
+    }
+
+    public void setBuyLink(String buyLink) {
+        this.buyLink = buyLink;
+    }
 
     public String getCountry() {
         return country;
@@ -32,6 +46,30 @@ public class SaleInfo {
 
     public void setIsEbook(Boolean isEbook) {
         this.isEbook = isEbook;
+    }
+
+    public ListPrice getListPrice() {
+        return listPrice;
+    }
+
+    public void setListPrice(ListPrice listPrice) {
+        this.listPrice = listPrice;
+    }
+
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
+    }
+
+    public RetailPrice getRetailPrice() {
+        return retailPrice;
+    }
+
+    public void setRetailPrice(RetailPrice retailPrice) {
+        this.retailPrice = retailPrice;
     }
 
     public String getSaleability() {
