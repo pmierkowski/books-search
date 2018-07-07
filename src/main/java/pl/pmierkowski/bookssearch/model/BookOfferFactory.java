@@ -59,17 +59,19 @@ public class BookOfferFactory {
     public List<BookOffer> fromGoogleBooks(GoogleBooks googleBooks, CurrencyRestRepository currencyRestRepository) {
         List<BookOffer> bookOffers = new ArrayList<>();
         for (Item item : googleBooks.getItems()) {
-            if (item.getSaleInfo().getRetailPrice() != null) {
-                BookOffer bookOffer = new BookOffer();
 
-                bookOffer.setSeller(Seller.Google);
-                bookOffer.setTitle(item.getVolumeInfo().getTitle());
-                bookOffer.setSubtitle(item.getVolumeInfo().getSubtitle());
-                bookOffer.setThumbnailUrl(item.getVolumeInfo().getImageLinks().getThumbnail());
-                bookOffer.setIsbn(item.getVolumeInfo().getIndustryIdentifiers().stream().filter(x -> x.getType().equals(BooksSearchService.REQUIRED_GOOGLE_TYPE)).findFirst().get().getIdentifier());
-                bookOffer.setShippingCost(0.0);//In google books there are only ebooks to buy
-                bookOffer.setLocalCurrency(this.localCurrency);
-                bookOffer.setBuyUrl(item.getVolumeInfo().getInfoLink());
+            BookOffer bookOffer = new BookOffer();
+
+            bookOffer.setSeller(Seller.Google);
+            bookOffer.setTitle(item.getVolumeInfo().getTitle());
+            bookOffer.setSubtitle(item.getVolumeInfo().getSubtitle());
+            bookOffer.setThumbnailUrl(item.getVolumeInfo().getImageLinks().getThumbnail());
+            bookOffer.setIsbn(item.getVolumeInfo().getIndustryIdentifiers().stream().filter(x -> x.getType().equals(BooksSearchService.REQUIRED_GOOGLE_TYPE)).findFirst().get().getIdentifier());
+            bookOffer.setShippingCost(0.0);//In google books there are only ebooks to buy
+            bookOffer.setLocalCurrency(this.localCurrency);
+            bookOffer.setBuyUrl(item.getVolumeInfo().getInfoLink());
+
+            if (item.getSaleInfo().getRetailPrice() != null) {
                 Currency currency = Currency.getInstance(item.getSaleInfo().getRetailPrice().getCurrencyCode());
                 Double price = item.getSaleInfo().getRetailPrice().getAmount();
 
@@ -81,9 +83,11 @@ public class BookOfferFactory {
                 Double localPrice = price * currencyRestRepository.getExchangeRates(currency, this.localCurrency);
 
                 bookOffer.setLocalPriceWithShipment(round(localPrice, 2));
-
-                bookOffers.add(bookOffer);
+            } else {
+                bookOffer.setForSale(false);
             }
+
+            bookOffers.add(bookOffer);
         }
 
         return bookOffers;

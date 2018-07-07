@@ -7,12 +7,11 @@ import pl.pmierkowski.bookssearch.model.BookOfferFactory;
 import pl.pmierkowski.bookssearch.model.BookOfferList;
 import pl.pmierkowski.bookssearch.model.ebay.FindItemsByProductResponseType;
 import pl.pmierkowski.bookssearch.model.google.GoogleBooks;
+import pl.pmierkowski.bookssearch.repository.CurrencyRestRepository;
 import pl.pmierkowski.bookssearch.repository.EbayRestRepository;
 import pl.pmierkowski.bookssearch.repository.GoogleBooksRestRepository;
-import pl.pmierkowski.bookssearch.repository.CurrencyRestRepository;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 @Service
@@ -46,11 +45,9 @@ public class BooksSearchService {
         bookOffers.addAll(this.bookOfferFactory.fromGoogleBooks(googleBooks, currencyRestRepository));
         bookOffers.addAll(this.bookOfferFactory.fromEbay(findItemsByProductResponseType, isbn, currencyRestRepository));
 
-        BookOfferList bookOfferList = new BookOfferList();
-        bookOfferList.setOtherOffers(bookOffers);
-        bookOfferList.setBestOffer(this.getBestBookOffer(bookOffers));
-
-        return bookOfferList;
+        BookOffer bestBookOffer = this.getBestBookOffer(bookOffers);
+        bookOffers.remove(bestBookOffer);
+        return new BookOfferList(bestBookOffer, bookOffers);
     }
 
     private BookOffer getBestBookOffer(List<BookOffer> bookOffers){

@@ -6,21 +6,16 @@ public class BookOfferList {
     private BookOffer bestOffer;
     private List<BookOffer> otherOffers;
 
-
+    public BookOfferList(BookOffer bestOffer, List<BookOffer> otherOffers) {
+        this.bestOffer = bestOffer;
+        this.otherOffers = otherOffers;
+    }
 
     public BookOffer getBestOffer() {
         return bestOffer;
     }
 
-    public void setBestOffer(BookOffer bestOffer) {
-        this.bestOffer = bestOffer;
-    }
-
     public List<BookOffer> getOtherOffers() {
         return otherOffers;
-    }
-
-    public void setOtherOffers(List<BookOffer> otherOffers) {
-        this.otherOffers = otherOffers;
     }
 }
