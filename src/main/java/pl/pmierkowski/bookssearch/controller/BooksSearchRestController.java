@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pl.pmierkowski.bookssearch.model.BookOfferList;
 import pl.pmierkowski.bookssearch.model.google.Item;
 import pl.pmierkowski.bookssearch.model.google.VolumeInfo;
 import pl.pmierkowski.bookssearch.service.BooksSearchService;
@@ -15,8 +16,6 @@ import java.util.stream.Collectors;
 
 @RestController
 public class BooksSearchRestController {
-
-    private static final String REQUIRED_TYPE = "ISBN_13";
 
     private BooksSearchService booksSearchService;
 
@@ -34,14 +33,13 @@ public class BooksSearchRestController {
                 .filter(
                         x -> x.getIndustryIdentifiers()
                                 .stream()
-                                .anyMatch(y -> y.getType().equals(REQUIRED_TYPE))
+                                .anyMatch(y -> y.getType().equals(BooksSearchService.REQUIRED_GOOGLE_TYPE))
                 )
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "prices/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public boolean getPrices(@RequestParam("isbn") String isbn) {
-        this.booksSearchService.getByIsbn(isbn);
-        return true;
+    @RequestMapping(value = "offers/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public BookOfferList getOffersByIsbn(@RequestParam("isbn") String isbn) {
+        return this.booksSearchService.getOffersByIsbn(isbn);
     }
 }

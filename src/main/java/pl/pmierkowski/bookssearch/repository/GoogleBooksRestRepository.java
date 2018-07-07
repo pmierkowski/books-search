@@ -15,7 +15,6 @@ import java.net.URI;
 public class GoogleBooksRestRepository {
 
     private final RestTemplate restTemplate;
-
     private final UriComponentsBuilder uriComponentsBuilder;
 
     @Autowired
@@ -24,7 +23,7 @@ public class GoogleBooksRestRepository {
         this.uriComponentsBuilder = uriComponentsBuilder;
     }
 
-    @Cacheable(value = CacheConfiguration.GOOGLE_BOOK_SEARCH, cacheManager = CacheConfiguration.CACHE_MANAGER)
+    @Cacheable(CacheConfiguration.GOOGLE_BOOK_SEARCH)
     public GoogleBooks findByTitle(String title) {
         URI uri = this.uriComponentsBuilder
                 .replaceQueryParam("q", "title:" + title)

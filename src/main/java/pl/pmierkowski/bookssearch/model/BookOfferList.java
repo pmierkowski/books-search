@@ -6,6 +6,8 @@ public class BookOfferList {
     private BookOffer bestOffer;
     private List<BookOffer> otherOffers;
 
+
+
     public BookOffer getBestOffer() {
         return bestOffer;
     }

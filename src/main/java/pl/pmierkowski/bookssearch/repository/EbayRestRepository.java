@@ -2,9 +2,11 @@ package pl.pmierkowski.bookssearch.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import pl.pmierkowski.bookssearch.configuration.CacheConfiguration;
 import pl.pmierkowski.bookssearch.model.ebay.FindItemsByProductResponseType;
 
 import java.net.URI;
@@ -13,7 +15,6 @@ import java.net.URI;
 public class EbayRestRepository {
 
     private final RestTemplate restTemplate;
-
     private final UriComponentsBuilder uriComponentsBuilder;
 
     @Autowired
@@ -22,6 +23,7 @@ public class EbayRestRepository {
         this.uriComponentsBuilder = uriComponentsBuilder;
     }
 
+    @Cacheable(CacheConfiguration.EBAY_BOOK_SEARCH)
     public FindItemsByProductResponseType findByIsbn(String isbn) {
         URI uri = this.uriComponentsBuilder
                 .replaceQueryParam("OPERATION-NAME", "findItemsByProduct")

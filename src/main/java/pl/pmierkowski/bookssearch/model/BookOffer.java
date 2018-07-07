@@ -1,22 +1,27 @@
 package pl.pmierkowski.bookssearch.model;
 
+import java.util.Currency;
+
 public class BookOffer {
-    private String seller;
+    private Seller seller;
     private String title;
     private String subtitle;
     private String thumbnailUrl;
-    private String isbn13;
-    private String currency;
+    private String isbn;
+    private Currency currency;
     private Double price;
     private Double shippingCost;
-    private String shippingCurrency;
+    private Currency shippingCurrency;
     private String buyUrl;
+    private boolean isForSale;
+    private Currency localCurrency;
+    private Double localPriceWithShipment;
 
-    public String getSeller() {
+    public Seller getSeller() {
         return seller;
     }
 
-    public void setSeller(String seller) {
+    public void setSeller(Seller seller) {
         this.seller = seller;
     }
 
@@ -44,19 +49,19 @@ public class BookOffer {
         this.thumbnailUrl = thumbnailUrl;
     }
 
-    public String getIsbn13() {
-        return isbn13;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setIsbn13(String isbn13) {
-        this.isbn13 = isbn13;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 
@@ -76,11 +81,11 @@ public class BookOffer {
         this.shippingCost = shippingCost;
     }
 
-    public String getShippingCurrency() {
+    public Currency getShippingCurrency() {
         return shippingCurrency;
     }
 
-    public void setShippingCurrency(String shippingCurrency) {
+    public void setShippingCurrency(Currency shippingCurrency) {
         this.shippingCurrency = shippingCurrency;
     }
 
@@ -90,5 +95,29 @@ public class BookOffer {
 
     public void setBuyUrl(String buyUrl) {
         this.buyUrl = buyUrl;
+    }
+
+    public boolean isForSale() {
+        return isForSale;
+    }
+
+    public void setForSale(boolean forSale) {
+        isForSale = forSale;
+    }
+
+    public Currency getLocalCurrency() {
+        return localCurrency;
+    }
+
+    public void setLocalCurrency(Currency localCurrency) {
+        this.localCurrency = localCurrency;
+    }
+
+    public Double getLocalPriceWithShipment() {
+        return localPriceWithShipment;
+    }
+
+    public void setLocalPriceWithShipment(Double localPriceWithShipment) {
+        this.localPriceWithShipment = localPriceWithShipment;
     }
 }
