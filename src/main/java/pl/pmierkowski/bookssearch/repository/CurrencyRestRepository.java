@@ -28,7 +28,7 @@ public class CurrencyRestRepository {
     }
 
     @Cacheable(CacheConfiguration.CURRENCY_SEARCH)
-    public Double getExchangeRates(Currency from, Currency to) {
+    public Double getExchangeRate(Currency from, Currency to) {
         String queryKey = from.getCurrencyCode() + "_" + to.getCurrencyCode();
 
         URI uri = this.uriComponentsBuilder
@@ -39,7 +39,7 @@ public class CurrencyRestRepository {
         ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = null;
+        JsonNode root;
         try {
             root = mapper.readTree(response.getBody());
         } catch (IOException e) {

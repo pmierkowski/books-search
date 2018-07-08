@@ -1,5 +1,6 @@
 package pl.pmierkowski.bookssearch.model;
 
+import com.google.common.base.Preconditions;
 import pl.pmierkowski.bookssearch.model.ebay.FindItemsByProductResponseType;
 import pl.pmierkowski.bookssearch.model.ebay.ItemType;
 import pl.pmierkowski.bookssearch.model.google.GoogleBooks;
@@ -8,13 +9,16 @@ import pl.pmierkowski.bookssearch.repository.CurrencyRestRepository;
 import pl.pmierkowski.bookssearch.service.BooksSearchService;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.Objects;
 
 public class BookOfferFactory {
+
+    public static final int MIN_DECIMAL_PLACES = 0;
+    public static final int LOCAL_PRICE_DECIMAL_PLACES = 2;
+    public static final double NO_SHIPPING_COST = 0.0;
 
     private final Currency localCurrency;
 
@@ -37,8 +41,8 @@ public class BookOfferFactory {
                         Double.parseDouble(Float.toString(itemType.getShippingInfo().getShippingServiceCost().getValue())) :
                         0.0;
 
-                Double localPrice = price * currencyRestRepository.getExchangeRates(currency, this.localCurrency) +
-                        shippingCost * currencyRestRepository.getExchangeRates(shippingCurrency, this.localCurrency);
+                Double localPrice = price * currencyRestRepository.getExchangeRate(currency, this.localCurrency) +
+                        shippingCost * currencyRestRepository.getExchangeRate(shippingCurrency, this.localCurrency);
 
                 BookOffer bookOffer = new BookOffer();
 
@@ -54,7 +58,7 @@ public class BookOfferFactory {
                 bookOffer.setLocalCurrency(this.localCurrency);
                 bookOffer.setForSale(true);
                 bookOffer.setBuyUrl(itemType.getViewItemURL());
-                bookOffer.setLocalPriceWithShipment(round(localPrice, 2));
+                bookOffer.setLocalPriceWithShipment(round(localPrice, LOCAL_PRICE_DECIMAL_PLACES));
 
                 bookOffers.add(bookOffer);
             }
@@ -95,12 +99,12 @@ public class BookOfferFactory {
                     bookOffer.setCurrency(currency);
                     bookOffer.setPrice(price);
                     bookOffer.setShippingCurrency(currency);
-                    bookOffer.setShippingCost(0.0);//In google books there are only e-books to buy
+                    bookOffer.setShippingCost(NO_SHIPPING_COST);//In google books there are only e-books to buy
                     bookOffer.setForSale(true);
 
-                    Double localPrice = price * currencyRestRepository.getExchangeRates(currency, this.localCurrency);
+                    Double localPrice = price * currencyRestRepository.getExchangeRate(currency, this.localCurrency);
 
-                    bookOffer.setLocalPriceWithShipment(round(localPrice, 2));
+                    bookOffer.setLocalPriceWithShipment(round(localPrice, LOCAL_PRICE_DECIMAL_PLACES));
                 } else {
                     bookOffer.setForSale(false);
                 }
@@ -113,10 +117,10 @@ public class BookOfferFactory {
     }
 
     private static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
+        Preconditions.checkArgument(places > MIN_DECIMAL_PLACES);
 
-        BigDecimal bd = new BigDecimal(Double.toString(value));
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+        return BigDecimal.valueOf(value)
+                .setScale(places, BigDecimal.ROUND_HALF_UP)
+                .doubleValue();
     }
 }
