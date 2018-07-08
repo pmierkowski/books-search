@@ -25,7 +25,12 @@ public class BooksSearchService {
     private BookOfferFactory bookOfferFactory;
 
     @Autowired
-    public BooksSearchService(GoogleBooksRestRepository googleBooksRestRepository, EbayRestRepository ebayRestRepository, CurrencyRestRepository currencyRestRepository, BookOfferFactory bookOfferFactory) {
+    public BooksSearchService(
+            GoogleBooksRestRepository googleBooksRestRepository,
+            EbayRestRepository ebayRestRepository,
+            CurrencyRestRepository currencyRestRepository,
+            BookOfferFactory bookOfferFactory) {
+
         this.googleBooksRestRepository = googleBooksRestRepository;
         this.ebayRestRepository = ebayRestRepository;
         this.currencyRestRepository = currencyRestRepository;
@@ -50,12 +55,16 @@ public class BooksSearchService {
         return new BookOfferList(bestBookOffer, bookOffers);
     }
 
-    private BookOffer getBestBookOffer(List<BookOffer> bookOffers){
-        BookOffer bestBookOffer = bookOffers.get(0);
+    private BookOffer getBestBookOffer(List<BookOffer> bookOffers) {
+        if(bookOffers.size() == 0){
+            return null;
+        }
+
+        BookOffer bestBookOffer = bookOffers.stream().findFirst().get();
         Double bestPrice = Double.POSITIVE_INFINITY;
 
-        for(BookOffer bookOffer: bookOffers){
-            if(bookOffer.isForSale() && bookOffer.getLocalPriceWithShipment() < bestPrice){
+        for (BookOffer bookOffer : bookOffers) {
+            if (bookOffer.isForSale() && bookOffer.getLocalPriceWithShipment() < bestPrice) {
                 bestPrice = bookOffer.getLocalPriceWithShipment();
                 bestBookOffer = bookOffer;
             }

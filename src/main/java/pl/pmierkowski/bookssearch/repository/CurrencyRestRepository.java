@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.pmierkowski.bookssearch.configuration.CacheConfiguration;
+import pl.pmierkowski.bookssearch.exception.CurrencyApiDownException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -28,8 +29,10 @@ public class CurrencyRestRepository {
 
     @Cacheable(CacheConfiguration.CURRENCY_SEARCH)
     public Double getExchangeRates(Currency from, Currency to) {
+        String queryKey = from.getCurrencyCode() + "_" + to.getCurrencyCode();
+
         URI uri = this.uriComponentsBuilder
-                .replaceQueryParam("q", from.getCurrencyCode() + "_" + to.getCurrencyCode())
+                .replaceQueryParam("q", queryKey)
                 .build()
                 .toUri();
 
@@ -39,12 +42,11 @@ public class CurrencyRestRepository {
         JsonNode root = null;
         try {
             root = mapper.readTree(response.getBody());
-
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new CurrencyApiDownException();
         }
-        JsonNode rate = root.path(from.getCurrencyCode() + "_" + to.getCurrencyCode()).path("val");
+        JsonNode exchangeRate = root.path(queryKey).path("val");
 
-        return Double.parseDouble(rate.toString());
+        return Double.parseDouble(exchangeRate.toString());
     }
 }
