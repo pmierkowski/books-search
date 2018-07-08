@@ -74,7 +74,9 @@ public class BookOfferFactory {
                 bookOffer.setSeller(Seller.Google);
                 bookOffer.setTitle(item.getVolumeInfo().getTitle());
                 bookOffer.setSubtitle(item.getVolumeInfo().getSubtitle());
-                bookOffer.setThumbnailUrl(item.getVolumeInfo().getImageLinks().getThumbnail());
+                if(!Objects.isNull(item.getVolumeInfo().getImageLinks())) {
+                    bookOffer.setThumbnailUrl(item.getVolumeInfo().getImageLinks().getThumbnail());
+                }
                 bookOffer.setIsbn(
                         item.getVolumeInfo().getIndustryIdentifiers().
                                 stream().
