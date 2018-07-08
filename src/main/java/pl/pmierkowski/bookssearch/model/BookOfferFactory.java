@@ -30,8 +30,12 @@ public class BookOfferFactory {
                 Currency currency = Currency.getInstance(itemType.getSellingStatus().getCurrentPrice().getCurrencyId());
                 Double price = Double.parseDouble(Float.toString(itemType.getSellingStatus().getCurrentPrice().getValue()));
 
-                Currency shippingCurrency = Currency.getInstance(itemType.getShippingInfo().getShippingServiceCost().getCurrencyId());
-                Double shippingCost = Double.parseDouble(Float.toString(itemType.getShippingInfo().getShippingServiceCost().getValue()));
+                Currency shippingCurrency = !Objects.isNull(itemType.getShippingInfo().getShippingServiceCost()) ?
+                        Currency.getInstance(itemType.getShippingInfo().getShippingServiceCost().getCurrencyId()) :
+                        currency;
+                Double shippingCost = !Objects.isNull(itemType.getShippingInfo().getShippingServiceCost()) ?
+                        Double.parseDouble(Float.toString(itemType.getShippingInfo().getShippingServiceCost().getValue())) :
+                        0.0;
 
                 Double localPrice = price * currencyRestRepository.getExchangeRates(currency, this.localCurrency) +
                         shippingCost * currencyRestRepository.getExchangeRates(shippingCurrency, this.localCurrency);
@@ -79,7 +83,6 @@ public class BookOfferFactory {
                                 .get()
                                 .getIdentifier()
                 );
-                bookOffer.setShippingCost(0.0);//In google books there are only e-books to buy
                 bookOffer.setLocalCurrency(this.localCurrency);
                 bookOffer.setBuyUrl(item.getVolumeInfo().getInfoLink());
 
@@ -90,6 +93,7 @@ public class BookOfferFactory {
                     bookOffer.setCurrency(currency);
                     bookOffer.setPrice(price);
                     bookOffer.setShippingCurrency(currency);
+                    bookOffer.setShippingCost(0.0);//In google books there are only e-books to buy
                     bookOffer.setForSale(true);
 
                     Double localPrice = price * currencyRestRepository.getExchangeRates(currency, this.localCurrency);
